@@ -91,6 +91,7 @@ const DEFAULT_SOURCES = [
   { key: 'nyt', label: 'NYT World', rssUrl: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml' },
   { key: 'techcrunch', label: 'TechCrunch', rssUrl: 'https://techcrunch.com/feed/' },
   { key: 'verge', label: 'The Verge', rssUrl: 'https://www.theverge.com/rss/index.xml' },
+  { key: 'sbs', label: 'SBS Australian News', rssUrl: 'https://www.sbs.com.au/news/feed' },
 ];
 
 // Personalization knobs
