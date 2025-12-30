@@ -93,6 +93,10 @@ const DEFAULT_SOURCES = [
   { key: 'verge', label: 'The Verge', rssUrl: 'https://www.theverge.com/rss/index.xml' },
   { key: 'sbs', label: 'SBS Australian News', rssUrl: 'https://www.sbs.com.au/news/feed' },
   { key: 'crikey', label: 'Crikey', rssUrl: 'https://www.crikey.com.au/feed/' },
+  // New Educational Sources:
+  { key: 'bigthink', label: 'Big Think', rssUrl: 'https://bigthink.com/feed/' },
+  { key: 'aeon', label: 'Aeon Essays', rssUrl: 'https://aeon.co/feed.rss' },
+  { key: 'nautilus', label: 'Nautilus', rssUrl: 'https://nautil.us/feed/' },
 ];
 
 // Personalization knobs
