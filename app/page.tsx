@@ -23,23 +23,17 @@ import {
 // Gemini API Helper
 // -----------------------------
 
-const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
-
 async function callGemini(prompt: string): Promise<string> {
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      }
-    );
+    const response = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    });
     
     if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
+      const error = await response.json();
+      throw new Error(error.error || `API Error: ${response.status}`);
     }
 
     const data = await response.json();

@@ -2,7 +2,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### 1. Configure Environment Variables
+
+Create a `.env.local` file in the root directory and add your Gemini API key:
+
+```bash
+GEMINI_API_KEY=your_api_key_here
+```
+
+Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey).
+
+### 2. Run the Development Server
 
 ```bash
 npm run dev
