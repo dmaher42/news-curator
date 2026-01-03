@@ -91,6 +91,9 @@ const DEFAULT_SOURCES = [
   { key: 'bigthink', label: 'Big Think', rssUrl: 'https://bigthink.com/feed/' },
   { key: 'aeon', label: 'Aeon Essays', rssUrl: 'https://aeon.co/feed.rss' },
   { key: 'nautilus', label: 'Nautilus', rssUrl: 'https://nautil.us/feed/' },
+  { key: 'nasa', label: 'NASA', rssUrl: 'https://www.nasa.gov/feed/' },
+  { key: 'nasa_jpl', label: 'NASA JPL', rssUrl: 'https://www.jpl.nasa.gov/feeds/news/' },
+  { key: 'space.com', label: 'Space.com', rssUrl: 'https://www.space.com/feeds/all' },
 ];
 
 // Personalization knobs
