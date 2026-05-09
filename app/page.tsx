@@ -16,7 +16,8 @@ import {
   TrendingUp,
   Sparkles,
   MessageSquareQuote,
-  Loader2
+  Loader2,
+  Activity
 } from 'lucide-react';
 
 // -----------------------------
@@ -72,7 +73,7 @@ type HistoryEvent = {
 type Prefs = {
   sourcesEnabled: Record<string, boolean>;
   mutedTopics: string[];
-  view: 'for_you' | 'latest' | 'saved';
+  view: 'for_you' | 'latest' | 'saved' | 'hpe_games';
 };
 
 // -----------------------------
@@ -159,6 +160,77 @@ const DEMO_STORIES: Story[] = [
     topics: ['History', 'Culture', 'Food'],
     image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
   },
+];
+
+const HPE_GAMES: Story[] = [
+  {
+    id: 'hpe-1',
+    title: 'Capture the Flag',
+    url: '#',
+    source: 'HPE Curriculum',
+    publishedAt: new Date().toISOString(),
+    excerpt: `Overview: A classic team-based game focusing on strategy, teamwork, and cardiovascular endurance.
+
+Rules:
+1. Divide the playing area into two halves, one for each team.
+2. Each team has a "flag" hidden in their territory.
+3. The objective is to sneak into the enemy territory, steal their flag, and return it safely to your own side.
+4. If tagged by an opponent while in their territory, the player goes to "jail" and must be rescued by a teammate.
+5. First team to capture the enemy flag wins.`,
+    topics: ['Strategy', 'Teamwork', 'Cardio'],
+    image: 'https://images.unsplash.com/photo-1526676537331-7af21921f009?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'hpe-2',
+    title: 'Ultimate Frisbee',
+    url: '#',
+    source: 'HPE Curriculum',
+    publishedAt: new Date().toISOString(),
+    excerpt: `Overview: A non-contact, self-refereed team sport played with a flying disc (frisbee). Great for agility and spatial awareness.
+
+Rules:
+1. The field is rectangular with end zones at each end.
+2. Teams score by catching a pass in the opponent's end zone.
+3. Players cannot run with the disc; they must throw it within 10 seconds of receiving it.
+4. If a pass is incomplete, intercepted, or knocked down, possession changes to the defending team.
+5. Physical contact is not allowed.`,
+    topics: ['Agility', 'Coordination', 'Non-contact'],
+    image: 'https://images.unsplash.com/photo-1559131397-f8cc0e62031a?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'hpe-3',
+    title: 'Benchball',
+    url: '#',
+    source: 'HPE Curriculum',
+    publishedAt: new Date().toISOString(),
+    excerpt: `Overview: An introductory game to netball/basketball that emphasizes throwing, catching, and moving into space.
+
+Rules:
+1. Divide the court into two halves. Each team has a bench at the back of their opponent's half.
+2. One player from each team starts standing on the bench.
+3. Teams pass a ball among themselves to throw it to their player on the bench.
+4. If the player on the bench catches the ball without falling off, the thrower joins them on the bench.
+5. The first team to get all their players onto the bench wins.`,
+    topics: ['Passing', 'Catching', 'Teamwork'],
+    image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'hpe-4',
+    title: 'Dodgeball (Soft Variations)',
+    url: '#',
+    source: 'HPE Curriculum',
+    publishedAt: new Date().toISOString(),
+    excerpt: `Overview: A high-energy game focusing on throwing accuracy, dodging, and quick reflexes. Use soft foam balls for safety.
+
+Rules:
+1. Two teams face each other on opposite halves of the court.
+2. Players throw soft foam balls to eliminate opponents by hitting them below the shoulders.
+3. If a thrown ball is caught by an opponent, the thrower is out, and a player from the catcher's team can re-enter.
+4. Players can use a ball they are holding to block incoming throws.
+5. A team wins by eliminating all players on the opposing team.`,
+    topics: ['Reflexes', 'Accuracy', 'High-Energy'],
+    image: 'https://images.unsplash.com/photo-1587329598270-42ba3b60ba42?auto=format&fit=crop&w=800&q=80',
+  }
 ];
 
 // -----------------------------
@@ -280,7 +352,7 @@ function Badge({ children, onClick }: { children: React.ReactNode, onClick?: () 
   );
 }
 
-function StoryCard({ story, saved, onOpen, onSave, onDismiss, debugScore }: any) {
+function StoryCard({ story, saved, isExpanded, onOpen, onSave, onDismiss, debugScore }: any) {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
 
@@ -343,7 +415,7 @@ function StoryCard({ story, saved, onOpen, onSave, onDismiss, debugScore }: any)
         </h3>
         
         {story.excerpt && (
-          <p className="mb-4 line-clamp-3 text-sm text-slate-500">
+          <p className={`mb-4 text-sm text-slate-500 ${isExpanded ? 'whitespace-pre-wrap' : 'line-clamp-3'}`}>
             {story.excerpt}
           </p>
         )}
@@ -523,6 +595,8 @@ export default function App() {
   const userProfile = useMemo(() => buildUserProfile(history), [history]);
 
   const displayedStories = useMemo(() => {
+    if (prefs.view === 'hpe_games') return HPE_GAMES;
+
     let pool = prefs.view === 'saved' 
       ? Object.values(saves) 
       : stories.filter(s => !dismissed[s.id]);
@@ -636,6 +710,12 @@ export default function App() {
               >
                 <Bookmark size={18} /> Saved ({Object.keys(saves).length})
               </button>
+              <button
+                onClick={() => setPrefs(p => ({ ...p, view: 'hpe_games' }))}
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${prefs.view === 'hpe_games' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
+              >
+                <Activity size={18} /> HPE Games
+              </button>
             </div>
           </div>
 
@@ -701,12 +781,12 @@ export default function App() {
           <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-3xl font-bold text-slate-900">
-                {prefs.view === 'for_you' ? 'Top Picks For You' : prefs.view === 'latest' ? 'Latest Headlines' : 'Reading List'}
+                {prefs.view === 'for_you' ? 'Top Picks For You' : prefs.view === 'latest' ? 'Latest Headlines' : prefs.view === 'hpe_games' ? 'HPE Games for Year 7 & 8' : 'Reading List'}
               </h1>
               <p className="mt-1 text-slate-500">
                 {prefs.view === 'for_you' 
                   ? 'Curated based on your local reading history.' 
-                  : `Showing ${displayedStories.length} stories.`}
+                  : prefs.view === 'hpe_games' ? 'Game ideas for Physical Education classes.' : `Showing ${displayedStories.length} stories.`}
               </p>
             </div>
 
@@ -774,6 +854,7 @@ export default function App() {
                   key={story.id} 
                   story={story} 
                   saved={!!saves[story.id]}
+                  isExpanded={prefs.view === 'hpe_games'}
                   debugScore={prefs.view === 'for_you' ? story._score : undefined}
                   onOpen={() => handleAction(story, 'open')}
                   onSave={() => handleAction(story, 'save')}
